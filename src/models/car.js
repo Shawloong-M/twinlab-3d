@@ -45,7 +45,7 @@ export function buildCar() {
 
     // 侧面轮廓（已内缩 0.03 补偿 bevel 外扩；slab 面即最终侧影）
     const outline = [
-      [2.16, 0.155], [2.21, 0.28], [2.205, 0.47], [2.17, 0.585], [1.90, 0.65],
+      [2.10, 0.14], [2.15, 0.26], [2.14, 0.42], [2.06, 0.56], [1.90, 0.65],
       [1.55, 0.71], [1.28, 0.755], [0.95, 0.765], [0.55, 0.775], [0.0, 0.785],
       [-0.60, 0.80], [-1.05, 0.845], [-1.45, 0.865], [-1.85, 0.845], [-2.10, 0.80],
       [-2.21, 0.755], [-2.215, 0.52], [-2.21, 0.30], [-2.15, 0.16],
@@ -198,16 +198,16 @@ export function buildCar() {
   {
     const root = new THREE.Group();
     const dark = M.plastic(0x16191d, 0.55);
-    const panel = mesh(new THREE.BoxGeometry(0.20, 0.014, 0.84), dark, -1.82, 0.868, 0);
+    const panel = mesh(new THREE.BoxGeometry(0.20, 0.012, 0.84), dark, -1.80, 0.845, 0);
     panel.rotation.z = 0.05;
     root.add(panel);
     for (let i = 0; i < 4; i++) {
-      const blade = mesh(new THREE.BoxGeometry(0.013, 0.055, 0.82), dark, -1.745 + i * 0.05, 0.895, 0);
-      blade.rotation.z = 0.22;
+      const blade = mesh(new THREE.BoxGeometry(0.013, 0.045, 0.82), dark, -1.745 + i * 0.05, 0.862, 0);
+      blade.rotation.z = 0.15;
       blade.userData.noEdges = true;
       root.add(blade);
     }
-    root.add(mesh(new THREE.BoxGeometry(0.16, 0.012, 0.90), M.plastic(0x101317, 0.5), -1.70, 0.878, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.16, 0.010, 0.90), M.plastic(0x101317, 0.5), -1.68, 0.850, 0));
     addEdges(root, 40);
     P(root, { name: '后引擎盖散热格栅', en: 'Engine Cover Grille', role: 'shell',
       desc: '后窗下方的垂直百叶为后置水平对置六缸引出散热气流，同时把新鲜空气导入进气系统。百叶角度经 CFD 优化：低速排热、高速利用负压抽风，是 911 尾部最有辨识度的细节之一。' },
@@ -236,17 +236,17 @@ export function buildCar() {
     const paint = M.paint(PAINT);
     const dark = M.plastic(0x14171b, 0.55);
     const chrome = M.chrome(0xd0d6dd);
-    root.add(mesh(roundedBox(0.28, 0.36, 1.64, 0.07), paint, 2.12, 0.315, 0));
-    root.add(mesh(new THREE.BoxGeometry(0.085, 0.19, 0.94), dark, 2.222, 0.245, 0));
-    root.add(mesh(new THREE.BoxGeometry(0.02, 0.02, 0.90), chrome, 2.268, 0.29, 0));
-    root.add(mesh(new THREE.BoxGeometry(0.02, 0.02, 0.90), chrome, 2.268, 0.20, 0));
+    root.add(mesh(roundedBox(0.26, 0.32, 1.60, 0.07), paint, 2.06, 0.28, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.075, 0.13, 0.82), dark, 2.15, 0.20, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.02, 0.02, 0.82), chrome, 2.16, 0.26, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.02, 0.02, 0.82), chrome, 2.16, 0.18, 0));
     for (const sz of [1, -1]) {
-      const si = mesh(new THREE.BoxGeometry(0.075, 0.15, 0.30), dark, 2.215, 0.30, sz * 0.60);
+      const si = mesh(new THREE.BoxGeometry(0.075, 0.13, 0.28), dark, 2.12, 0.26, sz * 0.58);
       si.rotation.y = -sz * 0.14;
       root.add(si);
     }
-    root.add(mesh(new THREE.BoxGeometry(0.30, 0.04, 1.52), dark, 2.13, 0.115, 0));
-    root.add(mesh(new THREE.BoxGeometry(0.012, 0.11, 0.36), dark, 2.268, 0.415, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.30, 0.04, 1.48), dark, 2.05, 0.10, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.012, 0.10, 0.34), dark, 2.15, 0.37, 0));
     addEdges(root, 40);
     P(root, { name: '前保险杠与进气口', en: 'Front Bumper & Air Intakes', role: 'shell',
       desc: '992 前脸中央宽进气口为主水箱导流，两侧进气口为前置中冷器与制动冷却供气，下缘分流器整理车底气流减少前轴升力。杠内集成了 ACC 雷达、前方摄像头与行人保护缓冲梁。' },
@@ -279,7 +279,7 @@ export function buildCar() {
     refs.headMat = M.emis(0xfff6d8, 0.3, { color: 0xb9c2cc });
     for (const sz of [1, -1]) {
       const lamp = new THREE.Group();
-      lamp.position.set(2.08, 0.625, sz * 0.615);
+      lamp.position.set(2.00, 0.545, sz * 0.60);
       lamp.rotation.y = -sz * 0.38;
       lamp.rotation.z = -sz * 0.10;
       const bezelG = new THREE.TorusGeometry(0.09, 0.014, 8, 22);
@@ -360,18 +360,22 @@ export function buildCar() {
     barrel.userData.noEdges = true;
     spin.add(barrel);
     spin.add(mesh(new THREE.TorusGeometry(RR - 0.006, 0.011, 8, 28), rimM, 0, 0, side * (TW * 0.4 - 0.01)));
-    // 五辐条（带厚度与扭转）
-    const spokeLen = RR - 0.05;
+    // 双五辐条：从轮毂到轮辋一气呵成，无扭转错位
     for (let i = 0; i < 5; i++) {
       const a = i / 5 * Math.PI * 2 + 0.3;
-      const sp = mesh(new THREE.BoxGeometry(0.052, spokeLen, 0.03), rimM,
-        Math.cos(a) * (0.05 + spokeLen / 2), Math.sin(a) * (0.05 + spokeLen / 2), side * (TW * 0.5 - 0.028));
-      sp.rotation.order = 'ZYX';
-      sp.rotation.y = 0.42;
-      sp.rotation.z = a;
-      sp.userData.noEdges = true;
-      spin.add(sp);
+      for (const off of [-0.048, 0.048]) {
+        const len = RR - 0.02;
+        const sp = mesh(new THREE.BoxGeometry(0.042, len, 0.026), rimM,
+          (0.035 + len / 2) * Math.cos(a) - off * Math.sin(a),
+          (0.035 + len / 2) * Math.sin(a) + off * Math.cos(a),
+          side * (TW * 0.5 - 0.03));
+        sp.rotation.z = a;
+        sp.userData.noEdges = true;
+        spin.add(sp);
+      }
     }
+    // 辐条与轮缘的收口亮环
+    spin.add(mesh(new THREE.TorusGeometry(RR - 0.012, 0.013, 8, 30), rimM, 0, 0, side * (TW * 0.5 - 0.025)));
     // 轮心盖
     const hub = mesh(new THREE.CylinderGeometry(0.052, 0.052, 0.04, 16), rimM, 0, 0, side * (TW * 0.5 - 0.02));
     hub.rotation.x = Math.PI / 2;
@@ -552,7 +556,7 @@ export function buildCar() {
     const dark = M.plastic(0x20242a, 0.62);
     const dark2 = M.plastic(0x15181d, 0.5);
     const chrome = M.chrome(0xcdd4dc);
-    root.add(mesh(roundedBox(0.36, 0.20, 1.32, 0.05), dark, 0.52, 0.90, 0));
+    root.add(mesh(roundedBox(0.30, 0.11, 1.28, 0.04), dark, 0.54, 0.868, 0));
     // 五联圆形仪表（中央转速表更大 —— 911 传统）
     root.add(mesh(roundedBox(0.05, 0.17, 0.38, 0.015), dark2, 0.385, 1.00, 0.35));
     refs.gaugeMat = M.emis(0x9fd0ff, 0.55, { color: 0x0c1420 });

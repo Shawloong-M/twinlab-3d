@@ -501,8 +501,18 @@ export function buildPhone() {
     const bezelGeo = new THREE.ExtrudeGeometry(roundedRectShape(7.72, 16.26, 1.12), { depth: 0.03, bevelEnabled: false });
     bezelGeo.translate(0, 0, 0.3575);
     root.add(mesh(bezelGeo, M.plastic(0x05070a, 0.4)));
-    // OLED 发光层（Canvas UI）
-    const panel = mesh(new THREE.PlaneGeometry(7.46, 16.0), screenMat, 0, 0, 0.394);
+    // OLED 发光层（Canvas UI）—— 圆角面板与边框圆角同心，四角不再露黑楔
+    const panelShape = roundedRectShape(7.46, 16.0, 1.05);
+    const panelGeo = new THREE.ShapeGeometry(panelShape, 24);
+    {
+      const pos = panelGeo.attributes.position, uv = panelGeo.attributes.uv;
+      for (let i = 0; i < uv.count; i++) {
+        uv.setXY(i, (pos.getX(i) + 7.46 / 2) / 7.46, (pos.getY(i) + 16.0 / 2) / 16.0);
+      }
+      uv.needsUpdate = true;
+    }
+    const panel = new THREE.Mesh(panelGeo, screenMat);
+    panel.position.set(0, 0, 0.394);
     panel.userData.noEdges = true;
     root.add(panel);
     // 盖板玻璃（微微下沉于中框端面）
