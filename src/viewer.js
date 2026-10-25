@@ -190,6 +190,8 @@ export class Viewer {
     const center = box.getCenter(new THREE.Vector3());
     this.modelRadius = Math.max(size.length() / 2, 0.6);
     this.modelCenter = center;
+    // 缩放上限随模型尺度走：A380 这类需要 180m+ 取景距离的大模型不被钳回近景
+    this.controls.maxDistance = Math.max(this._fitDistance() * 1.5, 40);
 
     // 灯光/雾随模型尺度适配
     const r = this.modelRadius;
