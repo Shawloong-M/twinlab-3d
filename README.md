@@ -171,6 +171,12 @@ Create a file in `src/models/`, implement `build() → { group, parts, params, u
 
 The repo ships with a GitHub Actions workflow — pushes to `main` build and publish to GitHub Pages automatically. The Vite `base: './'` keeps the build portable to any sub-path host.
 
+## 支持作者 / Support
+
+如果这个项目对你有帮助，欢迎来 [爱发电](https://afdian.com/a/Shawloong) 请作者喝杯咖啡 ☕
+
+If this project helps you, buy the author a coffee on [Afdian](https://afdian.com/a/Shawloong) ☕ — GitHub Stars are equally appreciated!
+
 ## 许可 / License
 
 - 代码 / Code：[MIT](LICENSE)
