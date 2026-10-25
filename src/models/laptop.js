@@ -81,9 +81,9 @@ export function buildLaptop() {
   /* ---- D 面（底壳） ---- */
   {
     const root = new THREE.Group();
-    const geo = new THREE.ExtrudeGeometry(roundedRectShape(BW, BD, 0.06), { depth: 0.020, bevelEnabled: false });
+    const geo = new THREE.ExtrudeGeometry(roundedRectShape(BW, BD, 0.06), { depth: 0.016, bevelEnabled: false });
     geo.rotateX(-Math.PI / 2);   // 平放为水平薄板
-    root.add(mesh(geo, matShell(0x8a949e), 0, 0.010, 0));
+    root.add(mesh(geo, matShell(0x8a949e), 0, 0.008, 0));
     // 底部脚垫与散热开孔
     for (const [x, z] of [[-0.55, -0.35], [0.55, -0.35], [-0.55, 0.35], [0.55, 0.35]]) {
       root.add(mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.012, 10), M.plastic(0x1a1d22, 0.7), x, 0.006, z));
@@ -99,7 +99,7 @@ export function buildLaptop() {
     const root = new THREE.Group();
     const geo = new THREE.ExtrudeGeometry(roundedRectShape(BW - 0.015, BD - 0.015, 0.05), { depth: 0.052, bevelEnabled: false });
     geo.rotateX(-Math.PI / 2);
-    root.add(mesh(geo, matShell(0x6e7781), 0, 0.046, 0));
+    root.add(mesh(geo, matShell(0x6e7781), 0, 0.024, 0));
     // 左侧：双 USB-C + 耳机孔；右侧：电源键 + 双 USB-A + HDMI + SD 卡槽
     const portM = M.plastic(0x0b0d10, 0.7);
     root.add(mesh(new THREE.BoxGeometry(0.026, 0.018, 0.09), portM, -BW / 2 - 0.001, 0.050, -0.28));
@@ -228,9 +228,9 @@ export function buildLaptop() {
   /* ---- C 面（键盘面） ---- */
   {
     const root = new THREE.Group();
-    const geo = new THREE.ExtrudeGeometry(roundedRectShape(BW, BD, 0.05), { depth: 0.018, bevelEnabled: false });
+    const geo = new THREE.ExtrudeGeometry(roundedRectShape(BW, BD, 0.05), { depth: 0.014, bevelEnabled: false });
     geo.rotateX(-Math.PI / 2);
-    root.add(mesh(geo, matShell(), 0, 0.081, 0));
+    root.add(mesh(geo, matShell(), 0, 0.076, 0));
     addEdges(root, 35);
     P(root, { name: 'C 面掌托', en: 'Top Case', role: 'shell',
       desc: 'CNC 一体成型铝合金 C 面：阳极氧化表层莫氏硬度 9，掌托边缘经钻石切割亮边工艺处理。' },
@@ -251,16 +251,16 @@ export function buildLaptop() {
     let idx = 0;
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        m.setPosition(-0.55 + c * 0.078, 0.083, -0.28 + r * 0.083);
+        m.setPosition(-0.55 + c * 0.078, 0.098, -0.28 + r * 0.083);
         inst.setMatrixAt(idx++, m);
       }
     }
     root.add(inst);
     // 空格键
-    root.add(mesh(new THREE.BoxGeometry(0.4, 0.016, 0.068), keyMat, 0.05, 0.083, -0.28 + 4 * 0.083));
+    root.add(mesh(new THREE.BoxGeometry(0.4, 0.016, 0.068), keyMat, 0.05, 0.098, -0.28 + 4 * 0.083));
     // 键盘区右上角电源键（带指示灯点）
-    root.add(mesh(new THREE.BoxGeometry(0.068, 0.016, 0.068), keyMat, 0.55, 0.083, -0.28));
-    root.add(mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.004, 12), M.emis(0x7fd4a2, 0.6, { color: 0x102018 }), 0.55, 0.092, -0.28));
+    root.add(mesh(new THREE.BoxGeometry(0.068, 0.016, 0.068), keyMat, 0.55, 0.098, -0.28));
+    root.add(mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.004, 12), M.emis(0x7fd4a2, 0.6, { color: 0x102018 }), 0.55, 0.107, -0.28));
     addEdges(root, 40);
     P(root, { name: '键盘', en: 'Backlit Keyboard', role: 'core',
       desc: '1.5mm 键程剪刀脚键盘：单键 RGB 背光，键帽 PBT 材质抗打油，X 型支架薄膜防水泼溅。' },
@@ -273,7 +273,7 @@ export function buildLaptop() {
     const geo = new THREE.ExtrudeGeometry(roundedRectShape(0.52, 0.34, 0.04), { depth: 0.004, bevelEnabled: false });
     geo.rotateX(-Math.PI / 2);
     root.add(mesh(geo, M.metal(0xb6c0ca, 0.35, 0.9), 0, 0.006, 0));
-    root.position.set(0, 0.081, 0.27);
+    root.position.set(0, 0.092, 0.27);
     addEdges(root, 35);
     P(root, { name: '触控板', en: 'Force Touch Trackpad', role: 'core',
       desc: '玻璃触控板：压感传感器全域可按，Taptic Engine 模拟段落点击手感，支持多指手势。' },
@@ -296,7 +296,7 @@ export function buildLaptop() {
     panel.userData.noEdges = true;
     root.add(panel);
     root.add(mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.012, 10), M.plastic(0x0c0e12, 0.4), 0, 0.83, 0.014)); // 摄像头
-    root.position.set(0, 0.079, -BD / 2 + 0.02);
+    root.position.set(0, 0.088, -BD / 2 + 0.02);
     addEdges(root, 35);
     P(root, { name: '屏幕总成', en: 'Display Assembly', role: 'core',
       desc: '14 英寸 3K OLED 触控屏：120Hz 刷新率，100% DCI-P3 色域出厂校色 ΔE<1，峰值亮度 600 尼特。' },
@@ -309,9 +309,9 @@ export function buildLaptop() {
   {
     const root = new THREE.Group();
     for (const x of [-0.45, 0.45]) {
-      root.add(mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.1, 12), M.metal(0x5a6068, 0.4, 0.85), x, 0.045, 0));
+      root.add(mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.1, 12), M.metal(0x5a6068, 0.4, 0.85), x, 0.080, 0));
     }
-    root.add(mesh(new THREE.BoxGeometry(1.0, 0.05, 0.06), M.metal(0x5a6068, 0.4, 0.85), 0, 0.038, 0));
+    root.add(mesh(new THREE.BoxGeometry(1.0, 0.05, 0.06), M.metal(0x5a6068, 0.4, 0.85), 0, 0.072, 0));
     root.position.set(0, 0.02, -BD / 2 + 0.02);
     addEdges(root, 40);
     P(root, { name: '转轴', en: 'Hinges', role: 'core',
