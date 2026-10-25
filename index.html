@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TwinLab · 3D 交互式建模 / 数字孪生展示</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234da3ff' d='M12 2 3 7v10l9 5 9-5V7z'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部栏 -->
+    <header id="topbar">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" class="logo-mark"><path d="M12 2 3 7v10l9 5 9-5V7L12 2zm0 2.2 6.8 3.8L12 11.8 5.2 8 12 4.2zM5 9.7l6 3.4v6.6l-6-3.3V9.7zm14 0v6.7l-6 3.3v-6.6l6-3.4z"/></svg>
+        <div class="logo-text">
+          <b>TwinLab</b><span>3D 交互式建模 · 数字孪生展示</span>
+        </div>
+      </div>
+      <nav id="modelTabs"></nav>
+      <div class="top-actions">
+        <button id="btnDayNight" class="tb-btn" title="昼夜切换 (N)">
+          <span class="ic" id="dnIcon">🌙</span><span id="dnText">夜间</span>
+        </button>
+        <button id="btnReset" class="tb-btn" title="重置视角 (R)">
+          <span class="ic">⟲</span><span>重置视角</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 3D 视口 -->
+    <main id="viewport">
+      <div id="canvasHost"></div>
+
+      <!-- 展示模式工具条 -->
+      <div id="modeBar"></div>
+
+      <!-- 部件信息卡 -->
+      <div id="infoCard" class="hidden">
+        <button id="infoClose" title="关闭">✕</button>
+        <div class="info-head">
+          <span id="infoRole" class="role-chip"></span>
+          <b id="infoName">部件名称</b>
+          <span id="infoEn" class="info-en"></span>
+        </div>
+        <p id="infoDesc"></p>
+        <div class="info-actions">
+          <button id="infoFocus" class="mini-btn">🎯 聚焦此部件</button>
+          <button id="infoIsolate" class="mini-btn">🔦 只显示所属系统</button>
+        </div>
+        <p id="infoSource" class="info-source">解剖数据 © DBCLS BodyParts3D · CC BY-SA 2.1 JP</p>
+      </div>
+
+      <!-- 底部状态栏 -->
+      <div id="statusBar">
+        <span id="statusLeft">就绪</span>
+        <span id="statusHud"></span>
+        <span id="statusRight">左键旋转 · 右键平移 · 滚轮缩放 · 点击部件查看详情 · 快捷键 1-7 切换模式</span>
+      </div>
+
+      <!-- 轻提示 -->
+      <div id="toast"></div>
+    </main>
+
+    <!-- 左侧：部件列表 -->
+    <aside id="leftPanel">
+      <div class="panel-head">
+        <h3>部件列表</h3><span id="partCount" class="count">0</span>
+      </div>
+      <input id="partSearch" type="text" placeholder="🔍 搜索部件名称…" />
+      <ul id="partList"></ul>
+    </aside>
+
+    <!-- 右侧：显示选项 / 模式控制 / 模型参数 -->
+    <aside id="rightPanel">
+      <section class="panel">
+        <h4>显示选项</h4>
+        <div id="displayOptions" class="opt-grid"></div>
+      </section>
+      <section class="panel">
+        <h4>模式控制</h4>
+        <div id="modeControls"></div>
+      </section>
+      <section class="panel">
+        <h4>模型参数</h4>
+        <div id="modelParams"></div>
+      </section>
+    </aside>
+
+    <!-- 加载遮罩 -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <p id="loadingText">正在构建模型…</p>
+    </div>
+  </div>
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>

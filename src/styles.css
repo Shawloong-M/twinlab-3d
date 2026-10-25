@@ -1,0 +1,303 @@
+/* ============ TwinLab 全局样式（专业 CAD 风格暗色 UI） ============ */
+:root {
+  --bg: #0b111c;
+  --panel: rgba(13, 19, 30, 0.88);
+  --panel-solid: #101827;
+  --line: #1e2a3d;
+  --line-soft: #17202f;
+  --txt: #d5e0ee;
+  --txt-dim: #7c8ba1;
+  --accent: #4da3ff;
+  --accent-soft: rgba(77, 163, 255, 0.14);
+  --warn: #f5a623;
+  --ok: #35d0a5;
+  --radius: 10px;
+  font-size: 14px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  user-select: none;
+}
+#app { position: relative; width: 100vw; height: 100vh; }
+
+/* ---------- 顶部栏 ---------- */
+#topbar {
+  position: absolute; inset: 0 0 auto 0; height: 58px; z-index: 30;
+  display: flex; align-items: center; gap: 18px; padding: 0 16px;
+  background: linear-gradient(180deg, rgba(10, 15, 25, 0.95), rgba(10, 15, 25, 0.82));
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+.logo { display: flex; align-items: center; gap: 10px; min-width: 210px; }
+.logo-mark { width: 30px; height: 30px; fill: var(--accent); filter: drop-shadow(0 0 6px rgba(77,163,255,.5)); }
+.logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+.logo-text b { font-size: 16px; letter-spacing: .5px; color: #fff; }
+.logo-text span { font-size: 11px; color: var(--txt-dim); }
+
+#modelTabs { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+#modelTabs::-webkit-scrollbar { display: none; }
+.m-tab {
+  display: flex; align-items: center; gap: 7px; padding: 7px 13px;
+  border: 1px solid var(--line); border-radius: 8px; background: transparent;
+  color: var(--txt-dim); font-size: 13px; cursor: pointer; white-space: nowrap;
+  transition: all .18s;
+}
+.m-tab svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.m-tab:hover { color: var(--txt); border-color: #2c3d57; background: rgba(255,255,255,.03); }
+.m-tab.active { color: #fff; border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 12px rgba(77,163,255,.15) inset; }
+.m-tab small { font-size: 10px; opacity: .65; letter-spacing: .4px; }
+
+.top-actions { display: flex; gap: 8px; }
+.tb-btn {
+  display: flex; align-items: center; gap: 6px; padding: 7px 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.02);
+  color: var(--txt); font-size: 12.5px; cursor: pointer; transition: all .18s;
+}
+.tb-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- 视口 ---------- */
+#viewport { position: absolute; inset: 0; }
+#canvasHost { position: absolute; inset: 0; }
+#canvasHost canvas { display: block; }
+#labelLayer {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 5;
+}
+
+/* ---------- 部件标注（CSS2D） ---------- */
+.p-tag {
+  pointer-events: none;
+  padding: 2px 8px; font-size: 11px; letter-spacing: .3px; white-space: nowrap;
+  color: #dfeaff; background: rgba(10, 20, 36, 0.78);
+  border: 1px solid rgba(110, 160, 230, 0.45); border-radius: 4px;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  transform: translateY(-14px);
+}
+
+/* ---------- 模式工具条 ---------- */
+#modeBar {
+  position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+  z-index: 20; display: flex; gap: 2px; padding: 4px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  backdrop-filter: blur(10px); box-shadow: 0 6px 24px rgba(0,0,0,.35);
+}
+.mode-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  min-width: 66px; padding: 7px 10px 6px; border: none; border-radius: 9px;
+  background: transparent; color: var(--txt-dim); font-size: 12px; cursor: pointer;
+  transition: all .16s; position: relative;
+}
+.mode-btn .k { position: absolute; top: 3px; right: 6px; font-size: 9px; opacity: .5; }
+.mode-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.mode-btn:hover { color: var(--txt); background: rgba(255,255,255,.04); }
+.mode-btn.active { color: var(--accent); background: var(--accent-soft); }
+.mode-btn.active::after {
+  content: ""; position: absolute; bottom: 2px; width: 16px; height: 2px;
+  border-radius: 2px; background: var(--accent);
+}
+
+/* ---------- 左侧部件列表 ---------- */
+#leftPanel {
+  position: absolute; top: 138px; bottom: 46px; left: 12px; width: 226px; z-index: 20;
+  display: flex; flex-direction: column;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  backdrop-filter: blur(10px); overflow: hidden;
+}
+.panel-head { display: flex; align-items: center; justify-content: space-between; padding: 11px 13px 8px; }
+.panel-head h3 { font-size: 13px; font-weight: 600; letter-spacing: .5px; }
+.count { font-size: 11px; color: var(--accent); background: var(--accent-soft); border-radius: 10px; padding: 1px 8px; }
+#partSearch {
+  margin: 0 10px 8px; padding: 7px 10px; font-size: 12px;
+  background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 7px;
+  color: var(--txt); outline: none;
+}
+#partSearch:focus { border-color: var(--accent); }
+#partSearch::placeholder { color: #5a6a80; }
+#partList { flex: 1; overflow-y: auto; list-style: none; padding: 2px 6px 8px; }
+#partList li {
+  display: flex; align-items: center; gap: 8px; padding: 6px 8px; margin: 1px 0;
+  border-radius: 6px; font-size: 12.5px; color: var(--txt); cursor: pointer; transition: background .12s;
+}
+#partList li:hover { background: rgba(255,255,255,.05); }
+#partList li.sel { background: var(--accent-soft); color: #cfe6ff; }
+#partList li .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+#partList li small { margin-left: auto; color: var(--txt-dim); font-size: 10px; }
+
+/* Atlas 分组列表 */
+#partList li.sys-head {
+  position: sticky; top: 0; z-index: 2;
+  background: #131c2b; padding: 8px 8px; margin: 6px 0 2px;
+  font-weight: 600; font-size: 12.5px; letter-spacing: .5px;
+  border-bottom: 1px solid var(--line);
+}
+#partList li.sys-head .sys-dot { width: 9px; height: 9px; border-radius: 50%; }
+#partList li.sys-head small { margin-left: auto; color: var(--accent); font-size: 10.5px; }
+#partList li.sys-head .sys-arrow { color: var(--txt-dim); font-size: 10px; margin-left: 6px; transition: transform .15s; }
+#partList li.sys-head.open .sys-arrow { transform: rotate(180deg); }
+#partList ul.sys-items { list-style: none; padding: 0; }
+#partList li.sub { padding-left: 24px; font-size: 12px; }
+#partList li.sub.more { color: var(--txt-dim); cursor: default; font-size: 11px; }
+#partList li.search-tip {
+  color: var(--accent); font-size: 11.5px; padding: 4px 8px;
+  background: var(--accent-soft); border-radius: 6px; margin: 4px 0;
+}
+.info-actions { display: flex; gap: 8px; }
+.info-source { font-size: 10px; color: var(--txt-dim); margin-top: 9px; letter-spacing: .3px; }
+
+/* 悬停部件名称提示（Atlas 爆炸布局） */
+.hover-tip {
+  position: fixed; z-index: 60; display: none; align-items: center; gap: 7px;
+  padding: 6px 12px; border-radius: 7px; pointer-events: none;
+  background: rgba(10, 16, 26, .93); border: 1px solid rgba(110, 155, 215, .4);
+  color: #e2ebf5; font-size: 12.5px; font-weight: 600; letter-spacing: .4px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .35); backdrop-filter: blur(6px);
+}
+.hover-tip .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.hover-tip small { color: #9fb4cc; font-weight: 400; font-size: 10.5px; margin-left: 2px; }
+
+/* ---------- 右侧面板 ---------- */
+#rightPanel {
+  position: absolute; top: 138px; bottom: 46px; right: 12px; width: 268px; z-index: 20;
+  display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-bottom: 4px;
+  scrollbar-width: thin; scrollbar-color: #26354c transparent;
+}
+.panel {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  backdrop-filter: blur(10px); padding: 11px 13px 13px; flex: none;
+}
+.panel h4 { font-size: 12px; font-weight: 600; color: var(--txt-dim); letter-spacing: 1px; margin-bottom: 10px; }
+.opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.opt-chip {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 7px 6px; border: 1px solid var(--line); border-radius: 7px;
+  font-size: 12px; color: var(--txt-dim); cursor: pointer; transition: all .15s;
+}
+.opt-chip:hover { color: var(--txt); }
+.opt-chip.on { color: var(--accent); border-color: rgba(77,163,255,.55); background: var(--accent-soft); }
+
+/* 参数行 */
+.p-row { margin-bottom: 11px; }
+.p-row:last-child { margin-bottom: 0; }
+.p-label { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 5px; }
+.p-label b { font-weight: 500; color: var(--txt); }
+.p-label .val { color: var(--accent); font-variant-numeric: tabular-nums; font-size: 12px; }
+input[type="range"] {
+  width: 100%; height: 4px; appearance: none; -webkit-appearance: none;
+  background: linear-gradient(90deg, var(--accent) var(--fill, 50%), #223046 var(--fill, 50%));
+  border-radius: 2px; outline: none; cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+  background: #e8f2ff; border: 2px solid var(--accent);
+  box-shadow: 0 0 8px rgba(77,163,255,.6); cursor: grab;
+}
+.switch-row { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; margin-bottom: 10px; }
+.switch { position: relative; width: 36px; height: 20px; flex: none; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .track {
+  position: absolute; inset: 0; border-radius: 20px; background: #223046; transition: .18s; cursor: pointer;
+}
+.switch .track::before {
+  content: ""; position: absolute; width: 14px; height: 14px; border-radius: 50%;
+  left: 3px; top: 3px; background: #8fa1b8; transition: .18s;
+}
+.switch input:checked + .track { background: rgba(77,163,255,.55); }
+.switch input:checked + .track::before { transform: translateX(16px); background: #fff; }
+select.p-select {
+  width: 100%; padding: 7px 9px; font-size: 12.5px; border-radius: 7px;
+  background: #16202f; color: var(--txt); border: 1px solid var(--line); outline: none; cursor: pointer;
+}
+.hint-text { font-size: 12px; color: var(--txt-dim); line-height: 1.7; }
+.btn-row { display: flex; gap: 7px; margin-top: 2px; }
+.act-btn {
+  flex: 1; padding: 7px 8px; font-size: 12px; border-radius: 7px; cursor: pointer;
+  border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--txt); transition: all .15s;
+}
+.act-btn:hover { border-color: var(--accent); color: var(--accent); }
+.act-btn.primary { background: var(--accent-soft); border-color: rgba(77,163,255,.5); color: var(--accent); }
+.seg { display: flex; gap: 4px; margin-bottom: 10px; }
+.seg button {
+  flex: 1; padding: 6px 0; font-size: 12px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--line); background: transparent; color: var(--txt-dim);
+}
+.seg button.on { color: var(--accent); border-color: rgba(77,163,255,.55); background: var(--accent-soft); }
+
+/* ---------- 信息卡 ---------- */
+#infoCard {
+  position: absolute; left: 250px; bottom: 58px; width: 320px; z-index: 25;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  backdrop-filter: blur(12px); padding: 14px 16px;
+  box-shadow: 0 10px 34px rgba(0,0,0,.45);
+  animation: rise .22s ease;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+#infoCard.hidden { display: none; }
+#infoClose {
+  position: absolute; top: 9px; right: 10px; width: 22px; height: 22px;
+  border: none; background: transparent; color: var(--txt-dim); font-size: 13px; cursor: pointer; border-radius: 5px;
+}
+#infoClose:hover { background: rgba(255,255,255,.08); color: #fff; }
+.info-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.info-head b { font-size: 15px; color: #fff; }
+.info-en { font-size: 11px; color: var(--txt-dim); letter-spacing: .4px; }
+.role-chip { font-size: 10.5px; padding: 2px 8px; border-radius: 9px; letter-spacing: .5px; }
+#infoDesc { font-size: 12.5px; line-height: 1.75; color: #b9c7da; margin-bottom: 10px; }
+.mini-btn {
+  padding: 6px 12px; font-size: 12px; border-radius: 7px; cursor: pointer;
+  border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--txt);
+}
+.mini-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- 状态栏 ---------- */
+#statusBar {
+  position: absolute; inset: auto 0 0 0; height: 34px; z-index: 22;
+  display: flex; align-items: center; gap: 20px; padding: 0 14px;
+  background: rgba(9, 14, 23, 0.9); border-top: 1px solid var(--line);
+  font-size: 11.5px; color: var(--txt-dim); backdrop-filter: blur(8px);
+}
+#statusLeft { color: var(--txt); }
+#statusHud { color: var(--ok); font-variant-numeric: tabular-nums; }
+#statusRight { margin-left: auto; }
+
+/* ---------- Toast ---------- */
+#toast {
+  position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%) translateY(8px);
+  z-index: 40; padding: 8px 18px; border-radius: 8px; font-size: 12.5px;
+  background: rgba(16, 26, 42, 0.92); border: 1px solid var(--line);
+  color: var(--txt); opacity: 0; pointer-events: none; transition: all .25s;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- 加载遮罩 ---------- */
+#loading {
+  position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+  background: radial-gradient(ellipse at center, #101b2d 0%, #070b13 75%);
+  transition: opacity .35s; 
+}
+#loading.off { opacity: 0; pointer-events: none; }
+.spinner {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 3px solid rgba(77,163,255,.18); border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loadingText { font-size: 13px; color: var(--txt-dim); letter-spacing: 2px; }
+
+/* 滚动条 */
+#partList::-webkit-scrollbar, #rightPanel::-webkit-scrollbar { width: 6px; }
+#partList::-webkit-scrollbar-thumb, #rightPanel::-webkit-scrollbar-thumb {
+  background: #26354c; border-radius: 3px;
+}
+
+/* 窄屏兼容 */
+@media (max-width: 1100px) {
+  #leftPanel { width: 190px; }
+  #rightPanel { width: 236px; }
+  #infoCard { left: 210px; }
+  .logo-text span { display: none; }
+}
