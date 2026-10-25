@@ -70,6 +70,8 @@ export function buildCar() {
         const t = THREE.MathUtils.clamp(x / 2.21, -1, 1);
         let k = 1.0 - 0.18 * t * t;                 // 两端收窄 18%
         if (y > 0.55) k *= 1 - (y - 0.55) * 0.35;   // 肩线上部内收
+        // 侧围鼓形曲率：腰线处外凸 4%，消除直壁"饼干盒"观感
+        k *= 1 + 0.04 * Math.sin(Math.PI * THREE.MathUtils.clamp((y - 0.14) / 0.68, 0, 1));
         pos.setZ(i, z * k);
       }
       geo.computeVertexNormals();

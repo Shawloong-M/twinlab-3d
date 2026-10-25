@@ -768,6 +768,81 @@ export function buildPhone() {
       [-0.95, 0.4, 1.05]);
   }
 
+  /* ---- 14. EMI 屏蔽罩（主板芯片电磁屏蔽盖板） ---- */
+  {
+    const root = new THREE.Group();
+    const shieldM = M.metal(0xa8b2bc, 0.32, 0.92);
+    root.add(mesh(roundedBox(2.5, 2.3, 0.07, 0.05), shieldM, -0.75, 0, 0));
+    root.add(mesh(roundedBox(1.3, 1.5, 0.07, 0.05), shieldM, 1.15, -0.35, 0));
+    // 屏蔽罩激光蚀刻窗口（可见内部芯片轮廓）
+    root.add(mesh(new THREE.BoxGeometry(1.6, 1.4, 0.006), M.plastic(0x2a3138, 0.5), -0.75, 0, -0.041));
+    root.add(mesh(new THREE.BoxGeometry(0.8, 0.6, 0.006), M.plastic(0x2a3138, 0.5), 1.15, -0.35, -0.041));
+    addEdges(root, 40);
+    P(root, { name: 'EMI 屏蔽罩', en: 'EMI Shielding Cans', role: 'internal',
+      desc: '两片一体冲压镍基合金屏蔽罩罩住 A19 Pro 与射频前端：把芯片电磁辐射约束在法拉第笼内，同时兼作顶部散热均热路径。罩面激光蚀刻检查窗便于产线目检芯片丝印。' },
+      [0, 1.6, 0.35]);
+  }
+
+  /* ---- 15. SIM 卡槽（左侧抽屉式卡托） ---- */
+  {
+    const root = new THREE.Group();
+    const trayM = M.brushed(0xb6bfc9);
+    root.add(mesh(roundedBox(0.10, 1.45, 0.24, 0.03), trayM, -3.93, 4.7, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.012, 1.05, 0.14), M.plastic(0x2c3138, 0.55), -3.985, 4.7, 0));
+    // 取卡针孔
+    root.add(mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.05, 10), M.plastic(0x0a0c10, 0.6), -3.985, 5.45, 0));
+    root.add(mesh(new THREE.BoxGeometry(0.02, 0.14, 0.02), M.plastic(0x0a0c10, 0.6), -3.985, 4.05, 0));
+    addEdges(root, 40);
+    P(root, { name: 'SIM 卡槽', en: 'SIM Card Tray', role: 'internal',
+      desc: '左侧抽屉式 nano-SIM 卡托：托盘集成防水硅胶圈与 IMEI 激光刻码，取卡针孔内置顶针顶出机构。美版机型此位置改为 eSIM-only 腔体，国行保留双实体卡槽。' },
+      [-1.1, -0.2, 0.5]);
+  }
+
+  /* ---- 16. 听筒与前传感排线 ---- */
+  {
+    const root = new THREE.Group();
+    // 听筒狭缝（屏幕顶部边框内）
+    root.add(mesh(new THREE.BoxGeometry(1.4, 0.10, 0.06), M.plastic(0x0b0d10, 0.55), 0, 15.62, 0.375));
+    // 柔性排线：从前听筒沿边框绕行
+    const flex = tube([
+      new THREE.Vector3(0.7, 15.6, 0.30), new THREE.Vector3(1.6, 15.35, 0.28),
+      new THREE.Vector3(2.5, 14.6, 0.24), new THREE.Vector3(3.0, 13.4, 0.18)
+    ], 0.05, M.plastic(0xb58a2c, 0.55), 24);
+    flex.userData.noEdges = true;
+    root.add(flex);
+    // 前摄与 Face ID 点阵投射器
+    root.add(mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.08, 14), M.metal(0x55606b, 0.4, 0.85), 0.85, 15.45, 0.3));
+    root.add(mesh(new THREE.CylinderGeometry(0.10, 0.10, 0.08, 14), M.metal(0x55606b, 0.4, 0.85), 1.25, 15.45, 0.3));
+    addEdges(root, 40);
+    P(root, { name: '听筒与前传感排线', en: 'Earpiece & Sensor Flex', role: 'internal',
+      desc: '立体声上听筒藏在屏幕顶边框内，与底部扬声器组成双扬声场。柔性排线把 Face ID 点阵投射器、红外摄像头与环境光传感器串入主板，排线弯折半径经万次疲劳测试。' },
+      [0.9, 0.5, 0.9]);
+  }
+
+  /* ---- 17. 底部天线馈线组 ---- */
+  {
+    const root = new THREE.Group();
+    const coaxM = M.metal(0x8f969e, 0.35, 0.9);
+    // 同轴馈线：主板射频端 → 底部主天线/分集天线
+    const l1 = tube([
+      new THREE.Vector3(-0.9, 11.0, 0.05), new THREE.Vector3(-1.5, 8.5, 0.05),
+      new THREE.Vector3(-2.2, 5.5, 0.02), new THREE.Vector3(-2.9, 3.0, -0.05)
+    ], 0.04, coaxM, 32);
+    const l2 = tube([
+      new THREE.Vector3(1.0, 11.0, 0.05), new THREE.Vector3(1.8, 8.0, 0.05),
+      new THREE.Vector3(2.6, 5.0, 0.0), new THREE.Vector3(3.2, 2.6, -0.05)
+    ], 0.04, coaxM, 32);
+    l1.userData = { noEdges: true }; l2.userData = { noEdges: true };
+    root.add(l1, l2);
+    // 天线馈电端子
+    root.add(mesh(new THREE.BoxGeometry(0.3, 0.5, 0.1), M.metal(0xc4ccd4, 0.3, 0.95), -2.95, 2.8, -0.05));
+    root.add(mesh(new THREE.BoxGeometry(0.3, 0.5, 0.1), M.metal(0xc4ccd4, 0.3, 0.95), 3.25, 2.4, -0.05));
+    addEdges(root, 45);
+    P(root, { name: '天线馈线组', en: 'Antenna Feed Cables', role: 'internal',
+      desc: '两组微型同轴馈线把射频前端信号分别馈入底部主天线与分集天线：极细镀银同轴外径仅 0.81mm，兼顾插损与弯折寿命。天线断点旁的馈电端子保证中框各分段谐振连续可调。' },
+      [0, -0.6, 0.6]);
+  }
+
   /* ---- 参数面板 ---- */
   const params = [
     { id: 'screenOn', label: '屏幕显示', type: 'toggle', value: true },
